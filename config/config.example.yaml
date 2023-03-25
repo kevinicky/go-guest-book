@@ -1,0 +1,17 @@
+app:
+  name:
+  port:
+  server:
+  timeout:
+    read:
+    write:
+    idle:
+
+database:
+  postgres:
+    host:
+    port:
+    username:
+    password:
+    name:
+    timezone:
