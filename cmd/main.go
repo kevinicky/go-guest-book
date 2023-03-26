@@ -25,18 +25,22 @@ func main() {
 		log.Fatalln("error while reading config.yaml:", err)
 	}
 
-	db, err := database.NewPostgresDB()
+	pgDB, err := database.NewPostgresDB()
 	if err != nil {
 		log.Fatalln("error while connecting to database:", err)
 	}
 
-	guestBookRepository := newGuestBookRepository(db)
+	guestBookRepository := newGuestBookRepository(pgDB)
 	guestBookUseCase := newGuestBookUseCase(guestBookRepository)
 	guestBookAdapter := newGuestBookAdapter(guestBookUseCase)
 
+	userRepository := newUserRepository(pgDB)
+	userUseCase := newUserUseCase(userRepository)
+	userAdapter := newUserAdapter(userUseCase)
+
 	mux := http.NewServeMux()
 	h := delivery.HTTPHandler{}
-	h.NewRest(mux, guestBookAdapter)
+	h.NewRest(mux, guestBookAdapter, userAdapter)
 
 	appName := viper.GetString("app.name")
 	appServer := viper.GetString("app.server")
