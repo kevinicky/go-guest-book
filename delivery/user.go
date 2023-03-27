@@ -6,6 +6,7 @@ import (
 	"github.com/kevinicky/go-guest-book/internal/adapter"
 	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
+	"github.com/kevinicky/go-guest-book/internal/util"
 	"net/http"
 	"strings"
 )
@@ -87,6 +88,42 @@ func getUser(userAdapter adapter.UserAdapter) http.HandlerFunc {
 				httpStatusCode = http.StatusBadRequest
 			} else if err.Error() == customerror.USER_NOT_FOUND {
 				httpStatusCode = http.StatusNotFound
+			} else {
+				httpStatusCode = http.StatusInternalServerError
+			}
+
+			msg := entity.ErrorMessage{
+				Code:    httpStatusCode,
+				Message: err.Error(),
+			}
+
+			jsonResp, _ := json.Marshal(msg)
+			w.WriteHeader(httpStatusCode)
+			_, _ = w.Write(jsonResp)
+
+			return
+		}
+
+		jsonResp, _ := json.Marshal(resp)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write(jsonResp)
+	}
+}
+
+func getUsers(userAdapter adapter.UserAdapter) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		limit, offset := util.GetLimitOffset(*r)
+		key := r.URL.Query().Get("key")
+		isAdmin := r.URL.Query().Get("is_admin")
+
+		resp, err := userAdapter.GetUsers(limit, offset, key, isAdmin)
+
+		if err != nil {
+			var httpStatusCode int
+			if err.Error() == customerror.IS_ADMIN_WRONG_CONTENT {
+				httpStatusCode = http.StatusBadRequest
 			} else {
 				httpStatusCode = http.StatusInternalServerError
 			}

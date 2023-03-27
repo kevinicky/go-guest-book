@@ -4,11 +4,14 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/internal/usecase"
+	"github.com/kevinicky/go-guest-book/internal/util"
+	"sync"
 )
 
 type UserAdapter interface {
 	CreateUser(req entity.CreateUserRequest) (*entity.UserSingleResponse, []error)
 	GetUser(userID string) (*entity.UserSingleResponse, error)
+	GetUsers(limit, offset int, key, isAdmin string) (*entity.UserMultiResponse, error)
 }
 
 type userAdapter struct {
@@ -44,6 +47,15 @@ func (u *userAdapter) GetUser(userID string) (*entity.UserSingleResponse, error)
 	return u.setSingleUserResponse(user), nil
 }
 
+func (u *userAdapter) GetUsers(limit, offset int, key, isAdmin string) (*entity.UserMultiResponse, error) {
+	users, err := u.userUseCase.GetUsers(limit, offset, key, isAdmin)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.setMultiUserResponse(users, limit, offset, key, isAdmin), nil
+}
+
 func (u *userAdapter) setSingleUserResponse(user *entity.User) *entity.UserSingleResponse {
 	resp := entity.UserSingleResponse{
 		ID:          user.ID,
@@ -54,6 +66,47 @@ func (u *userAdapter) setSingleUserResponse(user *entity.User) *entity.UserSingl
 		CreatedAt:   user.CreatedAt,
 		UpdatedAt:   user.UpdatedAt,
 		DeletedAt:   user.DeletedAt,
+	}
+
+	return &resp
+}
+
+func (u *userAdapter) setMultiUserResponse(users []entity.User, limit, offset int, key, isAdmin string) *entity.UserMultiResponse {
+	var usersSingleResp []entity.UserSingleResponse
+	var totalRows, totalPage, page int64
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		for _, user := range users {
+			usersSingleResp = append(usersSingleResp, *u.setSingleUserResponse(&user))
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		totalRows, _ = u.userUseCase.CountUser(key, isAdmin)
+		totalPage, page = util.CountTotalPageAndCurrentPage(totalRows, limit, offset)
+	}()
+
+	wg.Wait()
+
+	resp := entity.UserMultiResponse{
+		Page:      page,
+		Offset:    offset,
+		Limit:     limit,
+		TotalRows: totalRows,
+		TotalPage: totalPage,
+		Filter: entity.UserQueryFilter{
+			IsAdmin: isAdmin,
+			Key:     key,
+			OrderBy: entity.UserOrderBy{
+				Field: "full_name",
+				Sort:  "ascending",
+			},
+		},
+		Rows: usersSingleResp,
 	}
 
 	return &resp

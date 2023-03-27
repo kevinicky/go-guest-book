@@ -18,6 +18,8 @@ import (
 type UserUseCase interface {
 	CreateUser(req entity.CreateUserRequest) (*entity.User, []error)
 	GetUser(userID uuid.UUID) (*entity.User, error)
+	GetUsers(limit, offset int, key, isAdmin string) ([]entity.User, error)
+	CountUser(key, isAdmin string) (int64, error)
 }
 
 type userUseCase struct {
@@ -32,6 +34,18 @@ func NewUserUseCase(userRepository repository.UserRepository) UserUseCase {
 
 func (u *userUseCase) GetUser(userID uuid.UUID) (*entity.User, error) {
 	return u.userRepository.FindUser(userID)
+}
+
+func (u *userUseCase) GetUsers(limit, offset int, key, isAdmin string) ([]entity.User, error) {
+	if isAdmin != "" && isAdmin != "true" && isAdmin != "false" {
+		return nil, errors.New(customerror.IS_ADMIN_WRONG_CONTENT)
+	}
+
+	return u.userRepository.GetAllUser(limit, offset, key, isAdmin)
+}
+
+func (u *userUseCase) CountUser(key, isAdmin string) (int64, error) {
+	return u.userRepository.CountUser(key, isAdmin)
 }
 
 func (u *userUseCase) CreateUser(req entity.CreateUserRequest) (*entity.User, []error) {

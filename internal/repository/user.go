@@ -11,10 +11,9 @@ import (
 
 type UserRepository interface {
 	FindUser(id uuid.UUID) (*entity.User, error)
-	GetAllUser(limit, offset int, key string, isAdmin bool, isActive bool) ([]entity.User, error)
-	CountUser(key string, isAdmin bool, isActive bool) (int64, error)
+	GetAllUser(limit, offset int, key, isAdmin string) ([]entity.User, error)
+	CountUser(key, isAdmin string) (int64, error)
 	SoftDeleteUser(userID uuid.UUID) error
-	RemoveDeletedAt(userID uuid.UUID) error
 	CreateUser(user entity.User) (*entity.User, error)
 	CountExistingPhoneNumber(username string) (int64, error)
 	CountExistingEmail(email string) (int64, error)
@@ -45,57 +44,43 @@ func (u *userRepository) FindUser(id uuid.UUID) (*entity.User, error) {
 	return &user, resp.Error
 }
 
-func (u *userRepository) GetAllUser(limit, offset int, key string, isAdmin bool, isActive bool) ([]entity.User, error) {
+func (u *userRepository) GetAllUser(limit, offset int, key, isAdmin string) ([]entity.User, error) {
 	var users []entity.User
 
-	chain := u.pgDB.Unscoped().Limit(limit).Offset(offset)
+	chain := u.pgDB.Limit(limit).Offset(offset)
 
 	if key != "" {
 		keyLike := strings.ToUpper("%" + key + "%")
-		chain = chain.Where(chain.Or("UPPER(fullname) LIKE ?", keyLike).Or("UPPER(email) LIKE ?", keyLike).Or("UPPER(phone_number) LIKE ?", keyLike))
+		chain = chain.Where(chain.Or("UPPER(full_name) LIKE ?", keyLike).Or("UPPER(email) LIKE ?", keyLike).Or("UPPER(phone_number) LIKE ?", keyLike))
 	}
 
 	switch isAdmin {
-	case true:
+	case "true":
 		chain = chain.Where("is_admin = ?", true)
-	case false:
+	case "false":
 		chain = chain.Where("is_admin = ?", false)
 	}
 
-	switch isActive {
-	case true:
-		chain = chain.Where("deleted_at IS NULL")
-	case false:
-		chain = chain.Where("deleted_at is NOT NULL")
-	}
-
-	resp := chain.Find(&users)
+	resp := chain.Order("full_name ASC").Find(&users)
 
 	return users, resp.Error
 }
 
-func (u *userRepository) CountUser(key string, isAdmin bool, isActive bool) (int64, error) {
+func (u *userRepository) CountUser(key, isAdmin string) (int64, error) {
 	var count int64
 	count = -1
 	chain := u.pgDB.Unscoped().Model(&entity.User{})
 
 	if key != "" {
 		keyLike := strings.ToUpper("%" + key + "%")
-		chain = chain.Where(chain.Or("UPPER(fullname) LIKE ?", keyLike).Or("UPPER(email) LIKE ?", keyLike).Or("UPPER(phone_number) LIKE ?", keyLike))
+		chain = chain.Where(chain.Or("UPPER(full_name) LIKE ?", keyLike).Or("UPPER(email) LIKE ?", keyLike).Or("UPPER(phone_number) LIKE ?", keyLike))
 	}
 
 	switch isAdmin {
-	case true:
+	case "true":
 		chain = chain.Where("is_admin = ?", true)
-	case false:
+	case "false":
 		chain = chain.Where("is_admin = ?", false)
-	}
-
-	switch isActive {
-	case true:
-		chain = chain.Where("deleted_at IS NULL")
-	case false:
-		chain = chain.Where("deleted_at is NOT NULL")
 	}
 
 	resp := chain.Count(&count)
@@ -105,12 +90,6 @@ func (u *userRepository) CountUser(key string, isAdmin bool, isActive bool) (int
 
 func (u *userRepository) SoftDeleteUser(userID uuid.UUID) error {
 	resp := u.pgDB.Delete(&entity.User{}, userID)
-
-	return resp.Error
-}
-
-func (u *userRepository) RemoveDeletedAt(userID uuid.UUID) error {
-	resp := u.pgDB.Unscoped().Model(&entity.User{}).Where("id", userID).Update("deleted_at", nil)
 
 	return resp.Error
 }

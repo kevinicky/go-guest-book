@@ -19,5 +19,6 @@ func (h *HTTPHandler) NewRest(r *mux.Router, guestBookAdapter adapter.GuestBookA
 func user(s *mux.Router, userAdapter adapter.UserAdapter) {
 	u := s.PathPrefix("/users").Subrouter()
 	u.HandleFunc("", createUser(userAdapter)).Methods(http.MethodPost)
+	u.HandleFunc("/list", getUsers(userAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{user_id}", getUser(userAdapter)).Methods(http.MethodGet)
 }
