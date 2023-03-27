@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gofrs/uuid"
+	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/internal/repository"
 	"golang.org/x/text/cases"
@@ -75,7 +76,7 @@ func (u *userUseCase) CreateUser(req entity.CreateUserRequest) (*entity.User, []
 
 func (u *userUseCase) validatePhoneNumber(phoneNumber string) (string, error) {
 	if phoneNumber == "" {
-		return "", errors.New("phone_number is mandatory")
+		return "", errors.New(customerror.PHONE_NUMBER_MANDATORY)
 	}
 
 	totalPhoneNumber, err := u.userRepository.CountExistingPhoneNumber(phoneNumber)
@@ -84,7 +85,7 @@ func (u *userUseCase) validatePhoneNumber(phoneNumber string) (string, error) {
 	}
 
 	if totalPhoneNumber > 0 {
-		return "", errors.New("phone number has taken")
+		return "", errors.New(customerror.PHONE_NUMBER_TAKEN)
 	}
 
 	return phoneNumber, nil
@@ -92,9 +93,14 @@ func (u *userUseCase) validatePhoneNumber(phoneNumber string) (string, error) {
 
 func (u *userUseCase) validateEmail(email string) (string, error) {
 	email = strings.TrimSpace(email)
+
+	if email == "" {
+		return "", errors.New(customerror.EMAIL_MANDATORY)
+	}
+
 	_, err := mail.ParseAddress(email)
 	if err != nil {
-		return "", errors.New("email is not valid")
+		return "", errors.New(customerror.INVALID_EMAIL)
 	}
 
 	totalEmail, err := u.userRepository.CountExistingEmail(email)
@@ -103,7 +109,7 @@ func (u *userUseCase) validateEmail(email string) (string, error) {
 	}
 
 	if totalEmail > 0 {
-		return "", errors.New("email has taken")
+		return "", errors.New(customerror.EMAIL_TAKEN)
 	}
 
 	return email, nil
@@ -111,11 +117,11 @@ func (u *userUseCase) validateEmail(email string) (string, error) {
 
 func (u *userUseCase) validatePassword(password string) (string, error) {
 	if len(password) > 64 {
-		return "", errors.New("password cannot more than 64 characters")
+		return "", errors.New(customerror.PASSWORD_LEN_GT_LIMIT)
 	}
 
 	if password == "" {
-		return "", errors.New("password cannot be empty")
+		return "", errors.New(customerror.PASSWORD_MANDATORY)
 	}
 
 	hash := sha256.New()
@@ -127,7 +133,7 @@ func (u *userUseCase) validatePassword(password string) (string, error) {
 
 func (u *userUseCase) validateFullName(fullname string) (string, error) {
 	if fullname == "" {
-		return "", errors.New("full_name is mandatory")
+		return "", errors.New(customerror.FULL_NAME_MANDATORY)
 	}
 
 	fullname = strings.TrimSpace(fullname)

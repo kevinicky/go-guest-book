@@ -3,6 +3,7 @@ package delivery
 import (
 	"encoding/json"
 	"github.com/kevinicky/go-guest-book/internal/adapter"
+	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"net/http"
 )
@@ -36,19 +37,21 @@ func createUser(userAdapter adapter.UserAdapter) http.HandlerFunc {
 
 			for _, err := range errList {
 				switch err.Error() {
-				case "password cannot be empty":
+				case customerror.PASSWORD_LEN_GT_LIMIT:
 					httpStatusCode = http.StatusBadRequest
-				case "password cannot more than 64 characters":
+				case customerror.PASSWORD_MANDATORY:
 					httpStatusCode = http.StatusBadRequest
-				case "email is not valid":
+				case customerror.INVALID_EMAIL:
 					httpStatusCode = http.StatusBadRequest
-				case "email has taken":
+				case customerror.EMAIL_TAKEN:
 					httpStatusCode = http.StatusBadRequest
-				case "phone number has taken":
+				case customerror.EMAIL_MANDATORY:
 					httpStatusCode = http.StatusBadRequest
-				case "full_name is mandatory":
+				case customerror.PHONE_NUMBER_TAKEN:
 					httpStatusCode = http.StatusBadRequest
-				case "phone_number is mandatory":
+				case customerror.PHONE_NUMBER_MANDATORY:
+					httpStatusCode = http.StatusBadRequest
+				case customerror.FULL_NAME_MANDATORY:
 					httpStatusCode = http.StatusBadRequest
 				default:
 					httpStatusCode = http.StatusInternalServerError
