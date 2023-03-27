@@ -1,15 +1,23 @@
 package delivery
 
 import (
+	"github.com/gorilla/mux"
 	"github.com/kevinicky/go-guest-book/internal/adapter"
 	"net/http"
 )
 
 type HTTPHandler struct{}
 
-func (h *HTTPHandler) NewRest(mux *http.ServeMux, guestBookAdapter adapter.GuestBookAdapter, userAdapter adapter.UserAdapter) {
-	apiVersion := "/api/v1"
+const apiVersion = "/api/v1"
 
-	mux.HandleFunc(apiVersion+"/health", health(guestBookAdapter))
-	mux.HandleFunc(apiVersion+"/users", createUser(userAdapter))
+func (h *HTTPHandler) NewRest(r *mux.Router, guestBookAdapter adapter.GuestBookAdapter, userAdapter adapter.UserAdapter) {
+	s := r.PathPrefix(apiVersion).Subrouter()
+	s.HandleFunc("/health", health(guestBookAdapter))
+	user(s, userAdapter)
+}
+
+func user(s *mux.Router, userAdapter adapter.UserAdapter) {
+	u := s.PathPrefix("/users").Subrouter()
+	u.HandleFunc("", createUser(userAdapter)).Methods(http.MethodPost)
+	u.HandleFunc("/{user_id}", getUser(userAdapter)).Methods(http.MethodGet)
 }

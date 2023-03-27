@@ -11,3 +11,5 @@ const PASSWORD_MANDATORY = "password is mandatory"
 const PASSWORD_LEN_GT_LIMIT = "password cannot more than 64 characters"
 
 const FULL_NAME_MANDATORY = "full_name is mandatory"
+
+const USER_NOT_FOUND = "user not found"

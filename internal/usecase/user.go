@@ -17,6 +17,7 @@ import (
 
 type UserUseCase interface {
 	CreateUser(req entity.CreateUserRequest) (*entity.User, []error)
+	GetUser(userID uuid.UUID) (*entity.User, error)
 }
 
 type userUseCase struct {
@@ -27,6 +28,10 @@ func NewUserUseCase(userRepository repository.UserRepository) UserUseCase {
 	return &userUseCase{
 		userRepository: userRepository,
 	}
+}
+
+func (u *userUseCase) GetUser(userID uuid.UUID) (*entity.User, error) {
+	return u.userRepository.FindUser(userID)
 }
 
 func (u *userUseCase) CreateUser(req entity.CreateUserRequest) (*entity.User, []error) {

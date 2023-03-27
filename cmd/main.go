@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/gorilla/mux"
 	"github.com/kevinicky/go-guest-book/delivery"
 	"github.com/kevinicky/go-guest-book/internal/repository/database"
 	"github.com/spf13/viper"
@@ -38,9 +39,9 @@ func main() {
 	userUseCase := newUserUseCase(userRepository)
 	userAdapter := newUserAdapter(userUseCase)
 
-	mux := http.NewServeMux()
+	r := mux.NewRouter()
 	h := delivery.HTTPHandler{}
-	h.NewRest(mux, guestBookAdapter, userAdapter)
+	h.NewRest(r, guestBookAdapter, userAdapter)
 
 	appName := viper.GetString("app.name")
 	appServer := viper.GetString("app.server")
@@ -54,7 +55,7 @@ func main() {
 		ReadTimeout:  appReadTO * time.Second,
 		WriteTimeout: appWriteTO * time.Second,
 		IdleTimeout:  appIdleTO * time.Second,
-		Handler:      mux,
+		Handler:      r,
 	}
 
 	go func() {

@@ -2,21 +2,17 @@ package delivery
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"github.com/kevinicky/go-guest-book/internal/adapter"
 	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"net/http"
+	"strings"
 )
 
 func createUser(userAdapter adapter.UserAdapter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-
-		if r.Method != http.MethodPost {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-
-			return
-		}
 
 		decoder := json.NewDecoder(r.Body)
 		var payload entity.CreateUserRequest
@@ -64,6 +60,42 @@ func createUser(userAdapter adapter.UserAdapter) http.HandlerFunc {
 			}
 
 			msg := map[string][]entity.ErrorMessage{"error": errResp}
+			jsonResp, _ := json.Marshal(msg)
+			w.WriteHeader(httpStatusCode)
+			_, _ = w.Write(jsonResp)
+
+			return
+		}
+
+		jsonResp, _ := json.Marshal(resp)
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write(jsonResp)
+	}
+}
+
+func getUser(userAdapter adapter.UserAdapter) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		userID := mux.Vars(r)["user_id"]
+		resp, err := userAdapter.GetUser(userID)
+
+		if err != nil {
+			var httpStatusCode int
+
+			if strings.HasPrefix(err.Error(), "uuid:") {
+				httpStatusCode = http.StatusBadRequest
+			} else if err.Error() == customerror.USER_NOT_FOUND {
+				httpStatusCode = http.StatusNotFound
+			} else {
+				httpStatusCode = http.StatusInternalServerError
+			}
+
+			msg := entity.ErrorMessage{
+				Code:    httpStatusCode,
+				Message: err.Error(),
+			}
+
 			jsonResp, _ := json.Marshal(msg)
 			w.WriteHeader(httpStatusCode)
 			_, _ = w.Write(jsonResp)

@@ -1,7 +1,9 @@
 package repository
 
 import (
+	"errors"
 	"github.com/gofrs/uuid"
+	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"gorm.io/gorm"
 	"strings"
@@ -34,6 +36,11 @@ func (u *userRepository) FindUser(id uuid.UUID) (*entity.User, error) {
 	user.ID = id
 
 	resp := u.pgDB.Unscoped().First(&user)
+	if resp.Error != nil {
+		if resp.Error.Error() == "record not found" {
+			resp.Error = errors.New(customerror.USER_NOT_FOUND)
+		}
+	}
 
 	return &user, resp.Error
 }

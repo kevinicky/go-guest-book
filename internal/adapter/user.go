@@ -1,12 +1,14 @@
 package adapter
 
 import (
+	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/internal/usecase"
 )
 
 type UserAdapter interface {
 	CreateUser(req entity.CreateUserRequest) (*entity.UserSingleResponse, []error)
+	GetUser(userID string) (*entity.UserSingleResponse, error)
 }
 
 type userAdapter struct {
@@ -21,6 +23,20 @@ func NewUserAdapter(userUseCase usecase.UserUseCase) UserAdapter {
 
 func (u *userAdapter) CreateUser(req entity.CreateUserRequest) (*entity.UserSingleResponse, []error) {
 	user, err := u.userUseCase.CreateUser(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return u.setSingleUserResponse(user), nil
+}
+
+func (u *userAdapter) GetUser(userID string) (*entity.UserSingleResponse, error) {
+	userUUID, err := uuid.FromString(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := u.userUseCase.GetUser(userUUID)
 	if err != nil {
 		return nil, err
 	}
