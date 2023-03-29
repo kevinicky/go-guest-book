@@ -11,10 +11,10 @@ func newUserRepository(db *gorm.DB) repository.UserRepository {
 	return repository.NewUserRepository(db)
 }
 
-func newUserUseCase(UserRepository repository.UserRepository) usecase.UserUseCase {
-	return usecase.NewUserUseCase(UserRepository)
+func newUserUseCase(userRepository repository.UserRepository) usecase.UserUseCase {
+	return usecase.NewUserUseCase(userRepository)
 }
 
-func newUserAdapter(UserUseCase usecase.UserUseCase) adapter.UserAdapter {
-	return adapter.NewUserAdapter(UserUseCase)
+func newUserAdapter(userUseCase usecase.UserUseCase) adapter.UserAdapter {
+	return adapter.NewUserAdapter(userUseCase)
 }

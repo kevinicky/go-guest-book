@@ -14,3 +14,5 @@ const USER_NOT_FOUND = "user not found"
 const IS_ADMIN_WRONG_CONTENT = "is_admin only be filled with true, false, or empty string"
 
 const USER_NO_RECORD_CHANGED = "no record changed"
+
+const USER_SUCCESS_DELETE = "success to delete user"
