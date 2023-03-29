@@ -3,8 +3,8 @@ package repository
 import (
 	"errors"
 	"github.com/gofrs/uuid"
-	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
+	"github.com/kevinicky/go-guest-book/util/customerror"
 	"gorm.io/gorm"
 	"strings"
 	"time"

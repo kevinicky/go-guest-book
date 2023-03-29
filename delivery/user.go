@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/kevinicky/go-guest-book/internal/adapter"
-	"github.com/kevinicky/go-guest-book/internal/customerror"
 	"github.com/kevinicky/go-guest-book/internal/entity"
-	"github.com/kevinicky/go-guest-book/internal/util"
+	"github.com/kevinicky/go-guest-book/util"
+	"github.com/kevinicky/go-guest-book/util/customerror"
 	"net/http"
 	"strings"
 )

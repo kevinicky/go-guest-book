@@ -4,7 +4,7 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/internal/usecase"
-	"github.com/kevinicky/go-guest-book/internal/util"
+	"github.com/kevinicky/go-guest-book/util"
 	"sync"
 )
 
