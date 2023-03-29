@@ -10,15 +10,22 @@ type HTTPHandler struct{}
 
 const apiVersion = "/api/v1"
 
-func (h *HTTPHandler) NewRest(r *mux.Router, guestBookAdapter adapter.GuestBookAdapter, userAdapter adapter.UserAdapter) {
+func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter, userAdapter adapter.UserAdapter) {
 	s := r.PathPrefix(apiVersion).Subrouter()
-	s.HandleFunc("/health", health(guestBookAdapter))
-	user(s, userAdapter)
+
+	healthRouter(s, healthAdapter)
+	userRouter(s, userAdapter)
 }
 
-func user(s *mux.Router, userAdapter adapter.UserAdapter) {
+func healthRouter(s *mux.Router, healthAdapter adapter.HealthAdapter) {
+	s.HandleFunc("/health", health(healthAdapter))
+}
+
+func userRouter(s *mux.Router, userAdapter adapter.UserAdapter) {
 	u := s.PathPrefix("/users").Subrouter()
 	u.HandleFunc("", createUser(userAdapter)).Methods(http.MethodPost)
 	u.HandleFunc("/list", getUsers(userAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{user_id}", getUser(userAdapter)).Methods(http.MethodGet)
+	u.HandleFunc("/{user_id}/delete", deleteUser(userAdapter)).Methods(http.MethodDelete)
+	u.HandleFunc("/{user_id}/edit", updateUser(userAdapter)).Methods(http.MethodPut)
 }

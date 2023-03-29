@@ -12,6 +12,8 @@ type UserAdapter interface {
 	CreateUser(req entity.CreateUserRequest) (*entity.UserSingleResponse, []error)
 	GetUser(userID string) (*entity.UserSingleResponse, error)
 	GetUsers(limit, offset int, key, isAdmin string) (*entity.UserMultiResponse, error)
+	DeleteUser(userID string) error
+	UpdateUser(userID string, req entity.UpdateUserRequest) (*entity.UserSingleResponse, []error)
 }
 
 type userAdapter struct {
@@ -56,16 +58,38 @@ func (u *userAdapter) GetUsers(limit, offset int, key, isAdmin string) (*entity.
 	return u.setMultiUserResponse(users, limit, offset, key, isAdmin), nil
 }
 
+func (u *userAdapter) DeleteUser(userID string) error {
+	userUUID, err := uuid.FromString(userID)
+	if err != nil {
+		return err
+	}
+
+	return u.userUseCase.DeleteUser(userUUID)
+}
+
+func (u *userAdapter) UpdateUser(userID string, req entity.UpdateUserRequest) (*entity.UserSingleResponse, []error) {
+	userUUID, err := uuid.FromString(userID)
+	if err != nil {
+		return nil, []error{err}
+	}
+
+	user, errList := u.userUseCase.UpdateUser(userUUID, req)
+	if errList != nil {
+		return nil, errList
+	}
+
+	return u.setSingleUserResponse(user), nil
+}
+
 func (u *userAdapter) setSingleUserResponse(user *entity.User) *entity.UserSingleResponse {
 	resp := entity.UserSingleResponse{
-		ID:          user.ID,
-		FullName:    user.FullName,
-		Email:       user.Email,
-		PhoneNumber: user.PhoneNumber,
-		IsAdmin:     user.IsAdmin,
-		CreatedAt:   user.CreatedAt,
-		UpdatedAt:   user.UpdatedAt,
-		DeletedAt:   user.DeletedAt,
+		ID:        user.ID,
+		FullName:  user.FullName,
+		Email:     user.Email,
+		IsAdmin:   user.IsAdmin,
+		CreatedAt: user.CreatedAt,
+		UpdatedAt: user.UpdatedAt,
+		DeletedAt: user.DeletedAt,
 	}
 
 	return &resp

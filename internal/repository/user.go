@@ -7,17 +7,18 @@ import (
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"gorm.io/gorm"
 	"strings"
+	"time"
 )
 
 type UserRepository interface {
 	FindUser(id uuid.UUID) (*entity.User, error)
-	GetAllUser(limit, offset int, key, isAdmin string) ([]entity.User, error)
+	GetUsers(limit, offset int, key, isAdmin string) ([]entity.User, error)
 	CountUser(key, isAdmin string) (int64, error)
 	SoftDeleteUser(userID uuid.UUID) error
 	CreateUser(user entity.User) (*entity.User, error)
 	CountExistingPhoneNumber(username string) (int64, error)
 	CountExistingEmail(email string) (int64, error)
-	UpdateUser(user entity.User) (*entity.User, error)
+	UpdateUser(user entity.User) error
 }
 
 type userRepository struct {
@@ -34,7 +35,7 @@ func (u *userRepository) FindUser(id uuid.UUID) (*entity.User, error) {
 	var user entity.User
 	user.ID = id
 
-	resp := u.pgDB.Unscoped().First(&user)
+	resp := u.pgDB.Where("deleted_at = ?", time.Time{}).First(&user)
 	if resp.Error != nil {
 		if resp.Error.Error() == "record not found" {
 			resp.Error = errors.New(customerror.USER_NOT_FOUND)
@@ -44,20 +45,19 @@ func (u *userRepository) FindUser(id uuid.UUID) (*entity.User, error) {
 	return &user, resp.Error
 }
 
-func (u *userRepository) GetAllUser(limit, offset int, key, isAdmin string) ([]entity.User, error) {
+func (u *userRepository) GetUsers(limit, offset int, key, isAdmin string) ([]entity.User, error) {
 	var users []entity.User
 
-	chain := u.pgDB.Limit(limit).Offset(offset)
+	chain := u.pgDB.Limit(limit).Offset(offset).Where("deleted_at = ?", time.Time{})
 
 	if key != "" {
 		keyLike := strings.ToUpper("%" + key + "%")
 		chain = chain.Where(chain.Or("UPPER(full_name) LIKE ?", keyLike).Or("UPPER(email) LIKE ?", keyLike).Or("UPPER(phone_number) LIKE ?", keyLike))
 	}
 
-	switch isAdmin {
-	case "true":
+	if isAdmin == "true" {
 		chain = chain.Where("is_admin = ?", true)
-	case "false":
+	} else if isAdmin == "false" {
 		chain = chain.Where("is_admin = ?", false)
 	}
 
@@ -69,17 +69,16 @@ func (u *userRepository) GetAllUser(limit, offset int, key, isAdmin string) ([]e
 func (u *userRepository) CountUser(key, isAdmin string) (int64, error) {
 	var count int64
 	count = -1
-	chain := u.pgDB.Unscoped().Model(&entity.User{})
+	chain := u.pgDB.Model(entity.User{}).Where("deleted_at = ?", time.Time{})
 
 	if key != "" {
 		keyLike := strings.ToUpper("%" + key + "%")
 		chain = chain.Where(chain.Or("UPPER(full_name) LIKE ?", keyLike).Or("UPPER(email) LIKE ?", keyLike).Or("UPPER(phone_number) LIKE ?", keyLike))
 	}
 
-	switch isAdmin {
-	case "true":
+	if isAdmin == "true" {
 		chain = chain.Where("is_admin = ?", true)
-	case "false":
+	} else if isAdmin == "false" {
 		chain = chain.Where("is_admin = ?", false)
 	}
 
@@ -89,7 +88,10 @@ func (u *userRepository) CountUser(key, isAdmin string) (int64, error) {
 }
 
 func (u *userRepository) SoftDeleteUser(userID uuid.UUID) error {
-	resp := u.pgDB.Delete(&entity.User{}, userID)
+	resp := u.pgDB.Model(entity.User{ID: userID}).Update("deleted_at", time.Now())
+	if resp.RowsAffected != 1 {
+		return errors.New(customerror.USER_NOT_FOUND)
+	}
 
 	return resp.Error
 }
@@ -106,7 +108,7 @@ func (u *userRepository) CreateUser(user entity.User) (*entity.User, error) {
 func (u *userRepository) CountExistingPhoneNumber(phoneNumber string) (int64, error) {
 	var total int64
 	total = -1
-	resp := u.pgDB.Unscoped().Model(entity.User{}).Where("phone_number", phoneNumber).Count(&total)
+	resp := u.pgDB.Model(entity.User{}).Where("phone_number", phoneNumber).Count(&total)
 
 	return total, resp.Error
 }
@@ -114,13 +116,13 @@ func (u *userRepository) CountExistingPhoneNumber(phoneNumber string) (int64, er
 func (u *userRepository) CountExistingEmail(email string) (int64, error) {
 	var total int64
 	total = -1
-	resp := u.pgDB.Unscoped().Model(entity.User{}).Where("email", email).Count(&total)
+	resp := u.pgDB.Model(entity.User{}).Where("email", email).Count(&total)
 
 	return total, resp.Error
 }
 
-func (u *userRepository) UpdateUser(user entity.User) (*entity.User, error) {
-	resp := u.pgDB.Save(&user)
+func (u *userRepository) UpdateUser(user entity.User) error {
+	resp := u.pgDB.Save(user)
 
-	return &user, resp.Error
+	return resp.Error
 }

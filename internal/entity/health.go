@@ -5,6 +5,11 @@ type Health struct {
 }
 
 type HealthComponent struct {
-	Server   string `json:"server"`
-	Database string `json:"database"`
+	Server   string           `json:"server"`
+	Database []HealthDatabase `json:"database"`
+}
+
+type HealthDatabase struct {
+	Name   string `json:"name"`
+	Status string `json:"status"`
 }

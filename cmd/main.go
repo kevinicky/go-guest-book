@@ -31,9 +31,9 @@ func main() {
 		log.Fatalln("error while connecting to database:", err)
 	}
 
-	guestBookRepository := newGuestBookRepository(pgDB)
-	guestBookUseCase := newGuestBookUseCase(guestBookRepository)
-	guestBookAdapter := newGuestBookAdapter(guestBookUseCase)
+	healthRepository := newHealthRepository(pgDB)
+	healthUseCase := newHealthUseCase(healthRepository)
+	healthAdapter := newHealthAdapter(healthUseCase)
 
 	userRepository := newUserRepository(pgDB)
 	userUseCase := newUserUseCase(userRepository)
@@ -41,7 +41,7 @@ func main() {
 
 	r := mux.NewRouter()
 	h := delivery.HTTPHandler{}
-	h.NewRest(r, guestBookAdapter, userAdapter)
+	h.NewRest(r, healthAdapter, userAdapter)
 
 	appName := viper.GetString("app.name")
 	appServer := viper.GetString("app.server")

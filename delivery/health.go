@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func health(guestBookAdapter adapter.GuestBookAdapter) http.HandlerFunc {
+func health(healthAdapter adapter.HealthAdapter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -16,7 +16,7 @@ func health(guestBookAdapter adapter.GuestBookAdapter) http.HandlerFunc {
 			return
 		}
 
-		resp := guestBookAdapter.Health()
+		resp := healthAdapter.Health()
 		jsonResp, err := json.Marshal(resp)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
