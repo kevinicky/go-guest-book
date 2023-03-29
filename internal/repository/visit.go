@@ -43,7 +43,7 @@ func (v *visitRepository) FindVisit(id uuid.UUID) (*entity.Visit, error) {
 
 func (v *visitRepository) GetVisits(limit, offset int) ([]entity.Visit, error) {
 	var visits []entity.Visit
-	resp := v.pgDB.Limit(limit).Offset(offset).Where("deleted_at = ?", time.Time{}).Order("created_at ASC").Find(&visits)
+	resp := v.pgDB.Limit(limit).Offset(offset).Joins("join users on visits.user_id = users.id").Where("visits.deleted_at = ?", time.Time{}).Where("users.deleted_at = ?", time.Time{}).Order("visits.created_at ASC").Find(&visits)
 
 	return visits, resp.Error
 }
@@ -51,7 +51,7 @@ func (v *visitRepository) GetVisits(limit, offset int) ([]entity.Visit, error) {
 func (v *visitRepository) CountVisit() (int64, error) {
 	var count int64
 	count = -1
-	resp := v.pgDB.Model(entity.Visit{}).Where("deleted_at = ?", time.Time{}).Count(&count)
+	resp := v.pgDB.Model(entity.Visit{}).Joins("join users on visits.user_id = users.id").Where("visits.deleted_at = ?", time.Time{}).Where("users.deleted_at = ?", time.Time{}).Count(&count)
 
 	return count, resp.Error
 }

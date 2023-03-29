@@ -36,8 +36,6 @@ type VisitMultiResponse struct {
 }
 
 type VisitQueryFilter struct {
-	Key     string       `json:"key"`
-	IsAdmin string       `json:"is_admin"`
 	OrderBy VisitOrderBy `json:"order_by"`
 }
 
