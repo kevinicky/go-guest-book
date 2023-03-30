@@ -10,12 +10,13 @@ type HTTPHandler struct{}
 
 const apiVersion = "/api/v1"
 
-func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter, userAdapter adapter.UserAdapter, visitAdapter adapter.VisitAdapter) {
+func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter, userAdapter adapter.UserAdapter, visitAdapter adapter.VisitAdapter, threadAdapter adapter.ThreadAdapter) {
 	s := r.PathPrefix(apiVersion).Subrouter()
 
 	healthRouter(s, healthAdapter)
 	userRouter(s, userAdapter)
 	visitRouter(s, visitAdapter)
+	threadRouter(s, threadAdapter)
 }
 
 func healthRouter(s *mux.Router, healthAdapter adapter.HealthAdapter) {
@@ -37,4 +38,12 @@ func visitRouter(s *mux.Router, visitAdapter adapter.VisitAdapter) {
 	u.HandleFunc("/list", getVisits(visitAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{visit_id}", getVisit(visitAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{visit_id}/delete", deleteVisit(visitAdapter)).Methods(http.MethodDelete)
+}
+
+func threadRouter(s *mux.Router, threadAdapter adapter.ThreadAdapter) {
+	u := s.PathPrefix("/threads").Subrouter()
+	u.HandleFunc("", createThread(threadAdapter)).Methods(http.MethodPost)
+	u.HandleFunc("/list", getThreads(threadAdapter)).Methods(http.MethodGet)
+	u.HandleFunc("/{thread_id}", getThread(threadAdapter)).Methods(http.MethodGet)
+	u.HandleFunc("/{thread_id}/delete", deleteThread(threadAdapter)).Methods(http.MethodDelete)
 }

@@ -70,9 +70,6 @@ func (v *visitAdapter) DeleteVisit(visitID string) error {
 
 func (v *visitAdapter) setSingleVisitResponse(visit *entity.Visit) *entity.VisitSingleResponse {
 	user, _ := v.userAdapter.GetUser(visit.UserID.String())
-	if user == nil {
-
-	}
 
 	resp := entity.VisitSingleResponse{
 		ID:        visit.ID,

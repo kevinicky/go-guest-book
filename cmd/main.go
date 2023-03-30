@@ -43,9 +43,13 @@ func main() {
 	visitUseCase := newVisitUseCase(visitRepository, userUseCase)
 	visitAdapter := newVisitAdapter(visitUseCase, userAdapter)
 
+	threadRepository := newThreadRepository(pgDB)
+	threadUseCase := newThreadUseCase(threadRepository, visitUseCase, userUseCase)
+	threadAdapter := newThreadAdapter(threadUseCase, visitAdapter, userAdapter)
+
 	r := mux.NewRouter()
 	h := delivery.HTTPHandler{}
-	h.NewRest(r, healthAdapter, userAdapter, visitAdapter)
+	h.NewRest(r, healthAdapter, userAdapter, visitAdapter, threadAdapter)
 
 	appName := viper.GetString("app.name")
 	appServer := viper.GetString("app.server")
