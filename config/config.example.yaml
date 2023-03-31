@@ -7,6 +7,10 @@ app:
     write:
     idle:
 
+jwt:
+  secret: 
+  expired:
+
 database:
   postgres:
     host:

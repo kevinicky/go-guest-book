@@ -263,7 +263,7 @@ func deleteUser(userAdapter adapter.UserAdapter) http.HandlerFunc {
 		}
 
 		resp := map[string]string{
-			"message": customerror.VISIT_SUCCESS_DELETE,
+			"message": customerror.USER_SUCCESS_DELETE,
 		}
 
 		jsonResp, _ := json.Marshal(resp)

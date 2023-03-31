@@ -48,11 +48,11 @@ func main() {
 	threadUseCase := newThreadUseCase(threadRepository, visitUseCase, userUseCase)
 	threadAdapter := newThreadAdapter(threadUseCase, visitAdapter, userAdapter)
 
+	jwtSecretKey := []byte(viper.GetString("jwt.secret"))
+	jwtExpired := viper.GetDuration("jwt.expired")
 	authUseCase := newAuthUseCase(userUseCase, entity.JwtClaims{
-		CredentialID: "",
-		Expired:      0,
-		Issuer:       "",
-		SecretKey:    nil,
+		Expired:   jwtExpired * time.Minute,
+		SecretKey: jwtSecretKey,
 	})
 	authAdapter := newAuthAdapter(authUseCase)
 

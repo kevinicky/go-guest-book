@@ -30,6 +30,10 @@ func NewAuthUseCase(userUseCase UserUseCase, jwtClaims entity.JwtClaims) AuthUse
 }
 
 func (a *authUseCase) CreateJWT(payloadAuth entity.JwtRequest) (*entity.JwtResponse, error) {
+	if payloadAuth.Issuer == "" {
+		return nil, errors.New(customerror.ISSUER_MANDATORY)
+	}
+
 	claims := a.jwtClaims
 	claims.Issuer = payloadAuth.Issuer
 	claims.CredentialID = payloadAuth.Credential

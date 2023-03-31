@@ -10,6 +10,7 @@ import (
 
 func login(authAdapter adapter.AuthAdapter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		credential, password, ok := r.BasicAuth()
 		if !ok {
 			jsonResp, _ := json.Marshal(entity.ErrorMessage{
@@ -58,7 +59,7 @@ func login(authAdapter adapter.AuthAdapter) http.HandlerFunc {
 		if err = decoder.Decode(&payload); err != nil {
 			jsonResp, _ := json.Marshal(entity.ErrorMessage{
 				Code:    http.StatusBadRequest,
-				Message: customerror.INVALID_JSON_HEADER,
+				Message: err.Error(),
 			})
 			w.WriteHeader(http.StatusBadRequest)
 			_, _ = w.Write(jsonResp)
@@ -69,11 +70,12 @@ func login(authAdapter adapter.AuthAdapter) http.HandlerFunc {
 		payload.Credential = credential
 
 		jwtToken, err := authAdapter.CreateJWT(payload)
-
 		if err != nil {
 			var statusCode int
 			switch err.Error() {
 			case customerror.INVALID_CREDENTIAL:
+				statusCode = http.StatusBadRequest
+			case customerror.ISSUER_MANDATORY:
 				statusCode = http.StatusBadRequest
 			default:
 				statusCode = http.StatusInternalServerError
