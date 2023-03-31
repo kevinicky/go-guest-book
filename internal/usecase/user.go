@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 )
 
 type UserUseCase interface {
@@ -189,6 +190,7 @@ func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest)
 
 func (u *userUseCase) sanitiseEmail(email string) string {
 	email = strings.TrimSpace(email)
+	email = strings.ToLower(email)
 
 	return email
 }
@@ -245,6 +247,20 @@ func (u *userUseCase) validateFullName(fullname string) error {
 
 func (u *userUseCase) sanitiseFullName(fullname string) string {
 	fullname = strings.TrimSpace(fullname)
+	words := strings.Split(fullname, " ")
+	sanitiseFullname := ""
 
-	return fullname
+	for _, word := range words {
+		word = strings.ToLower(word)
+		r := []rune(word)
+		r[0] = unicode.ToUpper(r[0])
+
+		if sanitiseFullname == "" {
+			sanitiseFullname += string(r)
+		} else {
+			sanitiseFullname += " " + string(r)
+		}
+	}
+
+	return sanitiseFullname
 }
