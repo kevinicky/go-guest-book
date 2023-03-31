@@ -13,6 +13,18 @@ import (
 
 func createVisit(visitAdapter adapter.VisitAdapter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		headerContentType := r.Header.Get("Content-Type")
+		if headerContentType != "application/json" {
+			jsonResp, _ := json.Marshal(entity.ErrorMessage{
+				Code:    http.StatusBadRequest,
+				Message: customerror.INVALID_JSON_HEADER,
+			})
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write(jsonResp)
+
+			return
+		}
+
 		w.Header().Set("Content-Type", "application/json")
 
 		decoder := json.NewDecoder(r.Body)

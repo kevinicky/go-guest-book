@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gorilla/mux"
 	"github.com/kevinicky/go-guest-book/delivery"
+	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/internal/repository/database"
 	"github.com/spf13/viper"
 	"log"
@@ -47,9 +48,17 @@ func main() {
 	threadUseCase := newThreadUseCase(threadRepository, visitUseCase, userUseCase)
 	threadAdapter := newThreadAdapter(threadUseCase, visitAdapter, userAdapter)
 
+	authUseCase := newAuthUseCase(userUseCase, entity.JwtClaims{
+		CredentialID: "",
+		Expired:      0,
+		Issuer:       "",
+		SecretKey:    nil,
+	})
+	authAdapter := newAuthAdapter(authUseCase)
+
 	r := mux.NewRouter()
 	h := delivery.HTTPHandler{}
-	h.NewRest(r, healthAdapter, userAdapter, visitAdapter, threadAdapter)
+	h.NewRest(r, healthAdapter, userAdapter, visitAdapter, threadAdapter, authAdapter)
 
 	appName := viper.GetString("app.name")
 	appServer := viper.GetString("app.server")

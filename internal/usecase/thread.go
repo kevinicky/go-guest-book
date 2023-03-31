@@ -69,7 +69,7 @@ func (t *threadUseCase) CreateThread(req entity.CreateThreadRequest) (*entity.Th
 	if req.UserID == uuid.Nil {
 		errList = append(errList, errors.New(customerror.USER_ID_IS_MANDATORY))
 	} else {
-		_, err := t.userUseCase.GetUser(req.UserID)
+		_, err := t.userUseCase.GetUser(req.UserID, "")
 		if err != nil {
 			errList = append(errList, err)
 		}

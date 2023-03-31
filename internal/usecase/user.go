@@ -1,12 +1,11 @@
 package usecase
 
 import (
-	"crypto/sha256"
 	"errors"
-	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/internal/repository"
+	"github.com/kevinicky/go-guest-book/util"
 	"github.com/kevinicky/go-guest-book/util/customerror"
 	"net/mail"
 	"strings"
@@ -17,7 +16,7 @@ import (
 
 type UserUseCase interface {
 	CreateUser(req entity.CreateUserRequest) (*entity.User, []error)
-	GetUser(userID uuid.UUID) (*entity.User, error)
+	GetUser(userID uuid.UUID, email string) (*entity.User, error)
 	GetUsers(limit, offset int, key, isAdmin string) ([]entity.User, error)
 	CountUser(key, isAdmin string) (int64, error)
 	DeleteUser(userID uuid.UUID) error
@@ -34,12 +33,12 @@ func NewUserUseCase(userRepository repository.UserRepository) UserUseCase {
 	}
 }
 
-func (u *userUseCase) GetUser(userID uuid.UUID) (*entity.User, error) {
-	return u.userRepository.FindUser(userID)
+func (u *userUseCase) GetUser(userID uuid.UUID, email string) (*entity.User, error) {
+	return u.userRepository.FindUser(userID, email)
 }
 
 func (u *userUseCase) DeleteUser(userID uuid.UUID) error {
-	_, err := u.userRepository.FindUser(userID)
+	_, err := u.userRepository.FindUser(userID, "")
 	if err != nil {
 		return err
 	}
@@ -124,7 +123,7 @@ func (u *userUseCase) CreateUser(req entity.CreateUserRequest) (*entity.User, []
 func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest) (*entity.User, []error) {
 	var errList []error
 
-	oldUser, err := u.GetUser(userID)
+	oldUser, err := u.GetUser(userID, "")
 	if err != nil {
 		return nil, []error{err}
 	}
@@ -218,11 +217,7 @@ func (u *userUseCase) validateEmail(email string) error {
 }
 
 func (u *userUseCase) sanitisePassword(password string) string {
-	hash := sha256.New()
-	hash.Write([]byte(password))
-	newPasswordByte := hash.Sum(nil)
-
-	return fmt.Sprintf("%x", newPasswordByte)
+	return util.HashSHA256(password)
 }
 
 func (u *userUseCase) validatePassword(password string) error {

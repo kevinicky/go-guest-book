@@ -11,7 +11,7 @@ import (
 )
 
 type UserRepository interface {
-	FindUser(id uuid.UUID) (*entity.User, error)
+	FindUser(id uuid.UUID, email string) (*entity.User, error)
 	GetUsers(limit, offset int, key, isAdmin string) ([]entity.User, error)
 	CountUser(key, isAdmin string) (int64, error)
 	SoftDeleteUser(userID uuid.UUID) error
@@ -31,11 +31,15 @@ func NewUserRepository(pgDB *gorm.DB) UserRepository {
 	}
 }
 
-func (u *userRepository) FindUser(id uuid.UUID) (*entity.User, error) {
+func (u *userRepository) FindUser(id uuid.UUID, email string) (*entity.User, error) {
 	var user entity.User
 	user.ID = id
 
-	resp := u.pgDB.Where("deleted_at = ?", time.Time{}).First(&user)
+	chain := u.pgDB.Where("deleted_at = ?", time.Time{})
+	if email != "" {
+		chain = chain.Where("email = ?", email)
+	}
+	resp := chain.First(&user)
 	if resp.Error != nil {
 		if resp.Error.Error() == "record not found" {
 			resp.Error = errors.New(customerror.USER_NOT_FOUND)

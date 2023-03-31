@@ -55,7 +55,7 @@ func (v *visitUseCase) CreateVisit(req entity.CreateVisitRequest) (*entity.Visit
 		return nil, []error{errors.New(customerror.USER_ID_IS_MANDATORY)}
 	}
 
-	_, err := v.userUseCase.GetUser(req.UserID)
+	_, err := v.userUseCase.GetUser(req.UserID, "")
 	if err != nil {
 		return nil, []error{err}
 	}

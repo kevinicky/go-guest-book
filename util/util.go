@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/sha256"
+	"fmt"
 	"math"
 	"net/http"
 	"strconv"
@@ -30,4 +32,12 @@ func GetLimitOffset(r http.Request) (int, int) {
 	offset := (page - 1) * limit
 
 	return limit, offset
+}
+
+func HashSHA256(word string) string {
+	hash := sha256.New()
+	hash.Write([]byte(word))
+	hashedWord := hash.Sum(nil)
+
+	return fmt.Sprintf("%x", hashedWord)
 }

@@ -41,7 +41,7 @@ func (u *userAdapter) GetUser(userID string) (*entity.UserSingleResponse, error)
 		return nil, err
 	}
 
-	user, err := u.userUseCase.GetUser(userUUID)
+	user, err := u.userUseCase.GetUser(userUUID, "")
 	if err != nil {
 		return nil, err
 	}

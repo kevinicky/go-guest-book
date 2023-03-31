@@ -10,13 +10,14 @@ type HTTPHandler struct{}
 
 const apiVersion = "/api/v1"
 
-func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter, userAdapter adapter.UserAdapter, visitAdapter adapter.VisitAdapter, threadAdapter adapter.ThreadAdapter) {
+func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter, userAdapter adapter.UserAdapter, visitAdapter adapter.VisitAdapter, threadAdapter adapter.ThreadAdapter, authAdapter adapter.AuthAdapter) {
 	s := r.PathPrefix(apiVersion).Subrouter()
 
 	healthRouter(s, healthAdapter)
 	userRouter(s, userAdapter)
 	visitRouter(s, visitAdapter)
 	threadRouter(s, threadAdapter)
+	authRouter(s, authAdapter)
 }
 
 func healthRouter(s *mux.Router, healthAdapter adapter.HealthAdapter) {
@@ -46,4 +47,9 @@ func threadRouter(s *mux.Router, threadAdapter adapter.ThreadAdapter) {
 	u.HandleFunc("/list", getThreads(threadAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{thread_id}", getThread(threadAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{thread_id}/delete", deleteThread(threadAdapter)).Methods(http.MethodDelete)
+}
+
+func authRouter(s *mux.Router, authAdapter adapter.AuthAdapter) {
+	u := s.PathPrefix("/auth").Subrouter()
+	u.HandleFunc("/login", login(authAdapter)).Methods(http.MethodPost)
 }
