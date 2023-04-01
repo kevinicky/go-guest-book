@@ -20,7 +20,7 @@ func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter
 	userRouter(withMiddleRouter, userAdapter)
 	visitRouter(withMiddleRouter, visitAdapter)
 	threadRouter(withMiddleRouter, threadAdapter)
-	authRouter(s, authAdapter)
+	authRouter(s, authAdapter, userAdapter)
 }
 
 func healthRouter(s *mux.Router, healthAdapter adapter.HealthAdapter) {
@@ -29,7 +29,6 @@ func healthRouter(s *mux.Router, healthAdapter adapter.HealthAdapter) {
 
 func userRouter(s *mux.Router, userAdapter adapter.UserAdapter) {
 	u := s.PathPrefix("/users").Subrouter()
-	u.HandleFunc("", createUser(userAdapter)).Methods(http.MethodPost)
 	u.HandleFunc("/list", getUsers(userAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{user_id}", getUser(userAdapter)).Methods(http.MethodGet)
 	u.HandleFunc("/{user_id}/delete", deleteUser(userAdapter)).Methods(http.MethodDelete)
@@ -52,7 +51,8 @@ func threadRouter(s *mux.Router, threadAdapter adapter.ThreadAdapter) {
 	u.HandleFunc("/{thread_id}/delete", deleteThread(threadAdapter)).Methods(http.MethodDelete)
 }
 
-func authRouter(s *mux.Router, authAdapter adapter.AuthAdapter) {
+func authRouter(s *mux.Router, authAdapter adapter.AuthAdapter, userAdapter adapter.UserAdapter) {
 	u := s.PathPrefix("/auth").Subrouter()
 	u.HandleFunc("/login", login(authAdapter)).Methods(http.MethodPost)
+	u.HandleFunc("/register", createUser(userAdapter)).Methods(http.MethodPost)
 }
