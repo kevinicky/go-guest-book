@@ -31,7 +31,7 @@ func (v *visitRepository) FindVisit(id uuid.UUID) (*entity.Visit, error) {
 	var visit entity.Visit
 	visit.ID = id
 
-	resp := v.pgDB.Where("deleted_at = ?", time.Time{}).First(&visit)
+	resp := v.pgDB.Joins("join users on visits.user_id = users.id").Where("visits.deleted_at = ?", time.Time{}).Where("users.deleted_at = ?", time.Time{}).First(&visit)
 	if resp.Error != nil {
 		if resp.Error.Error() == "record not found" {
 			resp.Error = errors.New(customerror.VISIT_NOT_FOUND)

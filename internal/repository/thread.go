@@ -31,7 +31,7 @@ func (t *threadRepository) FindThread(id uuid.UUID) (*entity.Thread, error) {
 	var thread entity.Thread
 	thread.ID = id
 
-	resp := t.pgDB.Where("deleted_at = ?", time.Time{}).First(&thread)
+	resp := t.pgDB.Joins("join visits on threads.visit_id = visits.id").Where("visits.deleted_at = ?", time.Time{}).Where("threads.deleted_at = ?", time.Time{}).First(&thread)
 	if resp.Error != nil {
 		if resp.Error.Error() == "record not found" {
 			resp.Error = errors.New(customerror.THREAD_NOT_FOUND)
