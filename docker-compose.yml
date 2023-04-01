@@ -16,7 +16,6 @@ services:
     image: redis:6.2.11-alpine3.17
     ports:
       - "6379:6379"
-
   postgres:
     container_name: postgres
     restart: always
@@ -28,8 +27,6 @@ services:
       POSTGRES_DB: guest_book
     volumes:
       - postgres-data:/var/lib/postgresql/data
-      - ./230401_pg_dump.sql:/docker-entrypoint-initdb.d/230401_pg_dump.sql
-
 volumes:
   postgres-data:
     driver: local
