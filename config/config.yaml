@@ -13,14 +13,14 @@ jwt:
 
 database:
   postgres:
-    host: localhost
+    host: postgres
     port: 5432
     username: postgres
     password: secret
     name: guest_book
     timezone: UTC
   redis:
-    host: localhost
+    host: redis
     port: 6379
     name: 0
     ttl: 10
