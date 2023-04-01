@@ -29,10 +29,15 @@ func main() {
 
 	pgDB, err := database.NewPostgresDB()
 	if err != nil {
-		log.Fatalln("error while connecting to database:", err)
+		log.Fatalln("error while connecting to database postgresql:", err)
 	}
 
-	healthRepository := newHealthRepository(pgDB)
+	dbRedis, _, err := database.NewRedisDB()
+	if err != nil {
+		log.Fatalln("error while connecting to database redis:", err)
+	}
+
+	healthRepository := newHealthRepository(pgDB, dbRedis)
 	healthUseCase := newHealthUseCase(healthRepository)
 	healthAdapter := newHealthAdapter(healthUseCase)
 

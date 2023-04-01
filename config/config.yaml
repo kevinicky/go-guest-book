@@ -19,3 +19,8 @@ database:
     password: secret
     name: guest_book
     timezone: UTC
+  redis:
+    host: localhost
+    port: 6379
+    name: 0
+    ttl: 10
