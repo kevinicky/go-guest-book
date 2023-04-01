@@ -1,0 +1,1160 @@
+{
+	"info": {
+		"_postman_id": "c3c2a0d5-29fa-4c7b-a005-409f9818d0e0",
+		"name": "Guest Book",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11593093"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/787e82d8-82e1-4ce0-9b99-b3415d7d5ba0",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/users/787e82d8-82e1-4ce0-9b99-b3415d7d5ba0",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:24:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "240"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0\",\n    \"full_name\": \"Wawan\",\n    \"email\": \"wawan@mail.com\",\n    \"is_admin\": false,\n    \"created_at\": \"2023-04-01T17:24:06.7979+07:00\",\n    \"updated_at\": \"2023-04-01T17:24:06.7979+07:00\",\n    \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/787e82d8-82e1-4ce0-9b99-b3415d7d5ba0/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0",
+								"delete"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete User",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/users/787e82d8-82e1-4ce0-9b99-b3415d7d5ba0/delete",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0",
+										"delete"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:26:13 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"success to delete user\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/users/list?limit=5&page=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"list"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User List",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/users/list?limit=5&page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"list"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "5"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:24:36 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "892"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"offset\": 0,\n    \"limit\": 5,\n    \"total_rows\": 3,\n    \"total_page\": 1,\n    \"filter\": {\n        \"key\": \"\",\n        \"is_admin\": \"\",\n        \"order_by\": {\n            \"field\": \"full_name\",\n            \"sort\": \"ascending\"\n        }\n    },\n    \"rows\": [\n        {\n            \"id\": \"355b4c07-bebc-4789-a8a0-f3f6b9c3b6d3\",\n            \"full_name\": \"Admin\",\n            \"email\": \"admin@admin.com\",\n            \"is_admin\": true,\n            \"created_at\": \"2023-04-01T12:13:12.170498+07:00\",\n            \"updated_at\": \"2023-04-01T12:13:12.170498+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        {\n            \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n            \"full_name\": \"John Doe\",\n            \"email\": \"johndoe@mail.com\",\n            \"is_admin\": false,\n            \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n            \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        {\n            \"id\": \"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0\",\n            \"full_name\": \"Wawan\",\n            \"email\": \"wawan@mail.com\",\n            \"is_admin\": false,\n            \"created_at\": \"2023-04-01T17:24:06.7979+07:00\",\n            \"updated_at\": \"2023-04-01T17:24:06.7979+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"wiwin@main.com\",\r\n    \"full_name\": \"Wiwin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/users/787e82d8-82e1-4ce0-9b99-b3415d7d5ba0/edit",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0",
+								"edit"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update User",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"wiwin@main.com\",\r\n    \"full_name\": \"Wiwin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/users/787e82d8-82e1-4ce0-9b99-b3415d7d5ba0/edit",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0",
+										"edit"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:24:59 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "228"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0\",\n    \"full_name\": \"Wiwin\",\n    \"email\": \"wiwin@main.com\",\n    \"is_admin\": false,\n    \"created_at\": \"0001-01-01T00:00:00Z\",\n    \"updated_at\": \"2023-04-01T17:24:59.0884109+07:00\",\n    \"deleted_at\": \"0001-01-01T00:00:00Z\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Guest Book",
+			"item": [
+				{
+					"name": "Create Guest Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"visits"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Guest Book",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/visits",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"visits"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:25:27 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "436"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"178fb093-6ee3-411b-866c-65dd225ede6c\",\n    \"user\": {\n        \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n        \"full_name\": \"John Doe\",\n        \"email\": \"johndoe@mail.com\",\n        \"is_admin\": false,\n        \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n    },\n    \"created_at\": \"2023-04-01T17:25:27.4516545+07:00\",\n    \"updated_at\": \"2023-04-01T17:25:27.4516545+07:00\",\n    \"deleted_at\": \"0001-01-01T00:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Guest Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/visits/178fb093-6ee3-411b-866c-65dd225ede6c",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"visits",
+								"178fb093-6ee3-411b-866c-65dd225ede6c"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Guest Book",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/visits/178fb093-6ee3-411b-866c-65dd225ede6c",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"visits",
+										"178fb093-6ee3-411b-866c-65dd225ede6c"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:25:38 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "439"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"178fb093-6ee3-411b-866c-65dd225ede6c\",\n    \"user\": {\n        \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n        \"full_name\": \"John Doe\",\n        \"email\": \"johndoe@mail.com\",\n        \"is_admin\": false,\n        \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n    },\n    \"created_at\": \"2023-04-01T17:25:27.451654+07:00\",\n    \"updated_at\": \"2023-04-01T17:25:27.451654+07:00\",\n    \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Guest Book",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/visits/178fb093-6ee3-411b-866c-65dd225ede6c/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"visits",
+								"178fb093-6ee3-411b-866c-65dd225ede6c",
+								"delete"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Guest Book",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/visits/178fb093-6ee3-411b-866c-65dd225ede6c/delete",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"visits",
+										"178fb093-6ee3-411b-866c-65dd225ede6c",
+										"delete"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:26:00 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "45"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"success to delete visit history\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Guest Book List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/visits/list?limit=2&page=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"visits",
+								"list"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Guest Book List",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/visits/list?limit=2&page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"visits",
+										"list"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:25:43 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1014"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"offset\": 0,\n    \"limit\": 2,\n    \"total_rows\": 2,\n    \"total_page\": 1,\n    \"filter\": {\n        \"order_by\": {\n            \"field\": \"created_at\",\n            \"sort\": \"ascending\"\n        }\n    },\n    \"rows\": [\n        {\n            \"id\": \"33dd9076-783a-4539-af61-96afd28bad46\",\n            \"user\": {\n                \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n                \"full_name\": \"John Doe\",\n                \"email\": \"johndoe@mail.com\",\n                \"is_admin\": false,\n                \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n            },\n            \"created_at\": \"2023-04-01T12:19:20.645207+07:00\",\n            \"updated_at\": \"2023-04-01T12:19:20.645207+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        {\n            \"id\": \"178fb093-6ee3-411b-866c-65dd225ede6c\",\n            \"user\": {\n                \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n                \"full_name\": \"John Doe\",\n                \"email\": \"johndoe@mail.com\",\n                \"is_admin\": false,\n                \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n            },\n            \"created_at\": \"2023-04-01T17:25:27.451654+07:00\",\n            \"updated_at\": \"2023-04-01T17:25:27.451654+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Create Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"visit_id\": \"33dd9076-783a-4539-af61-96afd28bad46\",\r\n    \"user_id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\r\n    \"content\": \"tempat makan murah meriah\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/threads",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"threads"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Comment",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"visit_id\": \"33dd9076-783a-4539-af61-96afd28bad46\",\r\n    \"user_id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\r\n    \"content\": \"tempat makan murah meriah\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/api/v1/threads",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"threads"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:26:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "922"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"f748ba44-e054-4f56-b9ed-c65b5517841b\",\n    \"visit\": {\n        \"id\": \"33dd9076-783a-4539-af61-96afd28bad46\",\n        \"user\": {\n            \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n            \"full_name\": \"John Doe\",\n            \"email\": \"johndoe@mail.com\",\n            \"is_admin\": false,\n            \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n            \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        \"created_at\": \"2023-04-01T12:19:20.645207+07:00\",\n        \"updated_at\": \"2023-04-01T12:19:20.645207+07:00\",\n        \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n    },\n    \"user\": {\n        \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n        \"full_name\": \"John Doe\",\n        \"email\": \"johndoe@mail.com\",\n        \"is_admin\": false,\n        \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n    },\n    \"content\": \"tempat makan murah meriah\",\n    \"created_at\": \"2023-04-01T17:26:34.9861602+07:00\",\n    \"updated_at\": \"2023-04-01T17:26:34.9861602+07:00\",\n    \"deleted_at\": \"0001-01-01T00:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Comment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/threads/f748ba44-e054-4f56-b9ed-c65b5517841b",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"threads",
+								"f748ba44-e054-4f56-b9ed-c65b5517841b"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Comment",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/threads/f748ba44-e054-4f56-b9ed-c65b5517841b",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"threads",
+										"f748ba44-e054-4f56-b9ed-c65b5517841b"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:26:52 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "923"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"f748ba44-e054-4f56-b9ed-c65b5517841b\",\n    \"visit\": {\n        \"id\": \"33dd9076-783a-4539-af61-96afd28bad46\",\n        \"user\": {\n            \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n            \"full_name\": \"John Doe\",\n            \"email\": \"johndoe@mail.com\",\n            \"is_admin\": false,\n            \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n            \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        \"created_at\": \"2023-04-01T12:19:20.645207+07:00\",\n        \"updated_at\": \"2023-04-01T12:19:20.645207+07:00\",\n        \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n    },\n    \"user\": {\n        \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n        \"full_name\": \"John Doe\",\n        \"email\": \"johndoe@mail.com\",\n        \"is_admin\": false,\n        \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n        \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n    },\n    \"content\": \"tempat makan murah meriah\",\n    \"created_at\": \"2023-04-01T17:26:34.98616+07:00\",\n    \"updated_at\": \"2023-04-01T17:26:34.98616+07:00\",\n    \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/threads/f748ba44-e054-4f56-b9ed-c65b5517841b/delete",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"threads",
+								"f748ba44-e054-4f56-b9ed-c65b5517841b",
+								"delete"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Comment",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/threads/f748ba44-e054-4f56-b9ed-c65b5517841b/delete",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"threads",
+										"f748ba44-e054-4f56-b9ed-c65b5517841b",
+										"delete"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:27:29 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "39"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"success to delete comment\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Comment based on Guest Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/threads/list?limit=11&page=1&visit_id=33dd9076-783a-4539-af61-96afd28bad46",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"threads",
+								"list"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "11"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "visit_id",
+									"value": "33dd9076-783a-4539-af61-96afd28bad46"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Comment based on Guest Book",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/v1/threads/list?limit=11&page=1&visit_id=33dd9076-783a-4539-af61-96afd28bad46",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"threads",
+										"list"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "11"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "visit_id",
+											"value": "33dd9076-783a-4539-af61-96afd28bad46"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Apr 2023 10:26:56 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1627"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"page\": 1,\n    \"offset\": 0,\n    \"limit\": 11,\n    \"total_rows\": 3,\n    \"total_page\": 1,\n    \"filter\": {\n        \"visit_id\": \"33dd9076-783a-4539-af61-96afd28bad46\",\n        \"order_by\": {\n            \"field\": \"created_at\",\n            \"sort\": \"ascending\"\n        }\n    },\n    \"rows\": [\n        {\n            \"id\": \"bf9db0bd-bfca-4d52-9014-e68efd49dfc4\",\n            \"user\": {\n                \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n                \"full_name\": \"John Doe\",\n                \"email\": \"johndoe@mail.com\",\n                \"is_admin\": false,\n                \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n            },\n            \"content\": \"tempat makannya adem, makanannya enak\",\n            \"created_at\": \"2023-04-01T12:20:13.558874+07:00\",\n            \"updated_at\": \"2023-04-01T12:20:13.558874+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        {\n            \"id\": \"ca04c881-5153-4ec9-8060-96b88bb6c0a4\",\n            \"user\": {\n                \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n                \"full_name\": \"John Doe\",\n                \"email\": \"johndoe@mail.com\",\n                \"is_admin\": false,\n                \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n            },\n            \"content\": \"tempat makan ramah anak\",\n            \"created_at\": \"2023-04-01T12:20:24.723979+07:00\",\n            \"updated_at\": \"2023-04-01T12:20:24.723979+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        },\n        {\n            \"id\": \"f748ba44-e054-4f56-b9ed-c65b5517841b\",\n            \"user\": {\n                \"id\": \"36182264-f4a4-4a89-8ec8-589bc6f0e519\",\n                \"full_name\": \"John Doe\",\n                \"email\": \"johndoe@mail.com\",\n                \"is_admin\": false,\n                \"created_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"updated_at\": \"2023-04-01T12:13:50.811607+07:00\",\n                \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n            },\n            \"content\": \"tempat makan murah meriah\",\n            \"created_at\": \"2023-04-01T17:26:34.98616+07:00\",\n            \"updated_at\": \"2023-04-01T17:26:34.98616+07:00\",\n            \"deleted_at\": \"0001-01-01T07:00:00+07:00\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/health",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"health"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Health",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/health",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 01 Apr 2023 08:54:14 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "106"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"server\": \"ok\",\n        \"database\": [\n            {\n                \"name\": \"postgresql\",\n                \"status\": \"ok\"\n            },\n            {\n                \"name\": \"redis\",\n                \"status\": \"ok\"\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"jsonResp = JSON.parse(responseBody);\r",
+							"if (jsonResp.error == null) {\r",
+							"    postman.setGlobalVariable(\"jwtToken\", jsonResp.jwt)\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "admin@admin.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"issuer\": \"website\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"issuer\": \"website\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 01 Apr 2023 10:22:24 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "302"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"credential\": \"355b4c07-bebc-4789-a8a0-f3f6b9c3b6d3\",\n    \"issuer\": \"website\",\n    \"expired\": 4565250171,\n    \"jwt\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJjcmVkZW50aWFsX2lkIjoiYWRtaW5AYWRtaW4uY29tIiwiZXhwIjo0NTY1MjUwMTcxLCJpc3N1ZXIiOiJ3ZWJzaXRlIn0.UdHZ68og1Z0tuZAJbEKSKwvGU0txhRLOTCVIZhYhZz4\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"wawan@mail.com\",\r\n    \"password\": \"secret\",\r\n    \"full_name\": \"Wawan\",\r\n    \"is_admin\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"wawan@mail.com\",\r\n    \"password\": \"secret\",\r\n    \"full_name\": \"Wawan\",\r\n    \"is_admin\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 01 Apr 2023 10:24:06 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "241"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"787e82d8-82e1-4ce0-9b99-b3415d7d5ba0\",\n    \"full_name\": \"Wawan\",\n    \"email\": \"wawan@mail.com\",\n    \"is_admin\": false,\n    \"created_at\": \"2023-04-01T17:24:06.7979008+07:00\",\n    \"updated_at\": \"2023-04-01T17:24:06.7979008+07:00\",\n    \"deleted_at\": \"0001-01-01T00:00:00Z\"\n}"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
