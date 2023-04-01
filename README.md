@@ -42,4 +42,11 @@ For this application, there is 4 tables:
 3. visits (record all visits (or commonly call it s guest_book) by users)
 4. threads (record all threads (or commonly call it as comment) by users)
 
-To show flow of this program, please refer to postman.json
+To show flow of this program, please refer to `guest_book.postman_collection`
+
+
+For admin login:
+
+username : admin@admin.com
+
+password : secret
