@@ -4,11 +4,13 @@ import (
 	"github.com/kevinicky/go-guest-book/internal/adapter"
 	"github.com/kevinicky/go-guest-book/internal/repository"
 	"github.com/kevinicky/go-guest-book/internal/usecase"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
+	"time"
 )
 
-func newThreadRepository(db *gorm.DB) repository.ThreadRepository {
-	return repository.NewThreadRepository(db)
+func newThreadRepository(dbPG *gorm.DB, dbRedis *redis.Client, redisTTL time.Duration) repository.ThreadRepository {
+	return repository.NewThreadRepository(dbPG, dbRedis, redisTTL)
 }
 
 func newThreadUseCase(threadRepository repository.ThreadRepository, visitUseCase usecase.VisitUseCase, userUseCase usecase.UserUseCase) usecase.ThreadUseCase {

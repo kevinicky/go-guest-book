@@ -32,7 +32,7 @@ func main() {
 		log.Fatalln("error while connecting to database postgresql:", err)
 	}
 
-	dbRedis, _, err := database.NewRedisDB()
+	dbRedis, redisTTL, err := database.NewRedisDB()
 	if err != nil {
 		log.Fatalln("error while connecting to database redis:", err)
 	}
@@ -41,15 +41,15 @@ func main() {
 	healthUseCase := newHealthUseCase(healthRepository)
 	healthAdapter := newHealthAdapter(healthUseCase)
 
-	userRepository := newUserRepository(pgDB)
+	userRepository := newUserRepository(pgDB, dbRedis, redisTTL)
 	userUseCase := newUserUseCase(userRepository)
 	userAdapter := newUserAdapter(userUseCase)
 
-	visitRepository := newVisitRepository(pgDB)
+	visitRepository := newVisitRepository(pgDB, dbRedis, redisTTL)
 	visitUseCase := newVisitUseCase(visitRepository, userUseCase)
 	visitAdapter := newVisitAdapter(visitUseCase, userAdapter)
 
-	threadRepository := newThreadRepository(pgDB)
+	threadRepository := newThreadRepository(pgDB, dbRedis, redisTTL)
 	threadUseCase := newThreadUseCase(threadRepository, visitUseCase, userUseCase)
 	threadAdapter := newThreadAdapter(threadUseCase, visitAdapter, userAdapter)
 

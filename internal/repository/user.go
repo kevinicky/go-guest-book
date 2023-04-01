@@ -1,10 +1,12 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/util/customerror"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 	"strings"
 	"time"
@@ -19,15 +21,22 @@ type UserRepository interface {
 	CountExistingEmail(email string) (int64, error)
 	UpdateUser(user entity.User) error
 	GetUserMatrix(endpoint string, isAdmin bool) ([]entity.UserMatrix, error)
+	SetCacheData(ctx context.Context, key string, value []byte) (string, error)
+	DeleteCacheData(ctx context.Context, key string) (int64, error)
+	GetCacheData(ctx context.Context, key string) (string, error)
 }
 
 type userRepository struct {
-	pgDB *gorm.DB
+	pgDB     *gorm.DB
+	redisDB  *redis.Client
+	redisTTL time.Duration
 }
 
-func NewUserRepository(pgDB *gorm.DB) UserRepository {
+func NewUserRepository(pgDB *gorm.DB, redisDB *redis.Client, redisTTL time.Duration) UserRepository {
 	return &userRepository{
-		pgDB: pgDB,
+		pgDB:     pgDB,
+		redisDB:  redisDB,
+		redisTTL: redisTTL,
 	}
 }
 
@@ -131,4 +140,31 @@ func (u *userRepository) GetUserMatrix(endpoint string, isAdmin bool) ([]entity.
 	}
 
 	return usersMatrix, resp.Error
+}
+
+func (u *userRepository) SetCacheData(ctx context.Context, key string, value []byte) (string, error) {
+	res, err := u.redisDB.Set(ctx, key, value, u.redisTTL*time.Second).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}
+
+func (u *userRepository) DeleteCacheData(ctx context.Context, key string) (int64, error) {
+	res, err := u.redisDB.Del(ctx, key).Result()
+	if err != nil {
+		return -1, err
+	}
+
+	return res, nil
+}
+
+func (u *userRepository) GetCacheData(ctx context.Context, key string) (string, error) {
+	res, err := u.redisDB.Get(ctx, key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
 }

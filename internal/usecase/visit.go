@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
@@ -30,10 +32,33 @@ func NewVisitUseCase(visitRepository repository.VisitRepository, userUseCase Use
 }
 
 func (v *visitUseCase) GetVisit(visitID uuid.UUID) (*entity.Visit, error) {
-	return v.visitRepository.FindVisit(visitID)
+	keyCache := "visit~" + visitID.String()
+	ctx := context.Background()
+	visitCache := entity.Visit{}
+	res, errCache := v.visitRepository.GetCacheData(ctx, keyCache)
+
+	if errCache != nil {
+		visit, err := v.visitRepository.FindVisit(visitID)
+		if err != nil {
+			return nil, err
+		}
+
+		resMarshall, _ := json.Marshal(visit)
+		_, _ = v.visitRepository.SetCacheData(ctx, keyCache, resMarshall)
+
+		return visit, err
+	}
+
+	_ = json.Unmarshal([]byte(res), &visitCache)
+
+	return &visitCache, nil
 }
 
 func (v *visitUseCase) DeleteVisit(visitID uuid.UUID) error {
+	ctx := context.Background()
+	keyCache := "visit~" + visitID.String()
+	_, _ = v.visitRepository.DeleteCacheData(ctx, keyCache)
+
 	_, err := v.visitRepository.FindVisit(visitID)
 	if err != nil {
 		return err
@@ -73,5 +98,11 @@ func (v *visitUseCase) CreateVisit(req entity.CreateVisitRequest) (*entity.Visit
 	if err != nil {
 		return nil, []error{err}
 	}
+
+	ctx := context.Background()
+	keyCache := "visit~" + visitResp.ID.String()
+	resMarshall, _ := json.Marshal(visitResp)
+	_, _ = v.visitRepository.SetCacheData(ctx, keyCache, resMarshall)
+
 	return visitResp, nil
 }

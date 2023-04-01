@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
@@ -33,7 +35,26 @@ func NewThreadUseCase(threadRepository repository.ThreadRepository, visitUseCase
 }
 
 func (t *threadUseCase) GetThread(threadID uuid.UUID) (*entity.Thread, error) {
-	return t.threadRepository.FindThread(threadID)
+	keyCache := "thread~" + threadID.String()
+	ctx := context.Background()
+	threadCache := entity.Thread{}
+	res, errCache := t.threadRepository.GetCacheData(ctx, keyCache)
+
+	if errCache != nil {
+		thread, err := t.threadRepository.FindThread(threadID)
+		if err != nil {
+			return nil, err
+		}
+
+		resMarshall, _ := json.Marshal(thread)
+		_, _ = t.threadRepository.SetCacheData(ctx, keyCache, resMarshall)
+
+		return thread, nil
+	}
+
+	_ = json.Unmarshal([]byte(res), &threadCache)
+
+	return &threadCache, nil
 }
 
 func (t *threadUseCase) DeleteThread(threadID uuid.UUID) error {
@@ -46,6 +67,10 @@ func (t *threadUseCase) DeleteThread(threadID uuid.UUID) error {
 }
 
 func (t *threadUseCase) GetThreads(limit, offset int, visitID uuid.UUID) ([]entity.Thread, error) {
+	ctx := context.Background()
+	keyCache := "thread~" + visitID.String()
+	_, _ = t.threadRepository.DeleteCacheData(ctx, keyCache)
+
 	return t.threadRepository.GetThreads(limit, offset, visitID)
 }
 
@@ -98,5 +123,11 @@ func (t *threadUseCase) CreateThread(req entity.CreateThreadRequest) (*entity.Th
 	if err != nil {
 		return nil, []error{err}
 	}
+
+	ctx := context.Background()
+	keyCache := "thread~" + threadResp.ID.String()
+	resMarshall, _ := json.Marshal(threadResp)
+	_, _ = t.threadRepository.SetCacheData(ctx, keyCache, resMarshall)
+
 	return threadResp, nil
 }

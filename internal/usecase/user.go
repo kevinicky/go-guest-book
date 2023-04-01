@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
@@ -35,10 +37,33 @@ func NewUserUseCase(userRepository repository.UserRepository) UserUseCase {
 }
 
 func (u *userUseCase) GetUser(userID uuid.UUID, email string) (*entity.User, error) {
-	return u.userRepository.FindUser(userID, email)
+	keyCache := "user~" + userID.String()
+	ctx := context.Background()
+	userCache := entity.User{}
+
+	res, errCache := u.userRepository.GetCacheData(ctx, keyCache)
+	if errCache != nil {
+		user, err := u.userRepository.FindUser(userID, email)
+		if err != nil {
+			return nil, err
+		}
+
+		resMarshall, _ := json.Marshal(user)
+		_, _ = u.userRepository.SetCacheData(ctx, keyCache, resMarshall)
+
+		return user, err
+	}
+
+	_ = json.Unmarshal([]byte(res), &userCache)
+
+	return &userCache, nil
 }
 
 func (u *userUseCase) DeleteUser(userID uuid.UUID) error {
+	ctx := context.Background()
+	keyCache := "user~" + userID.String()
+	_, _ = u.userRepository.DeleteCacheData(ctx, keyCache)
+
 	_, err := u.userRepository.FindUser(userID, "")
 	if err != nil {
 		return err
@@ -63,6 +88,7 @@ func (u *userUseCase) CreateUser(req entity.CreateUserRequest) (*entity.User, []
 	var errList []error
 	var sanitiseFullName, sanitiseEmail, sanitisePassword string
 	var err error
+	ctx := context.Background()
 	wg := sync.WaitGroup{}
 	wg.Add(3)
 
@@ -118,11 +144,16 @@ func (u *userUseCase) CreateUser(req entity.CreateUserRequest) (*entity.User, []
 		errList = append(errList, err)
 	}
 
+	keyCache := "user~" + userResp.ID.String()
+	resMarshall, _ := json.Marshal(userResp)
+	_, _ = u.userRepository.SetCacheData(ctx, keyCache, resMarshall)
+
 	return userResp, errList
 }
 
 func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest) (*entity.User, []error) {
 	var errList []error
+	ctx := context.Background()
 
 	oldUser, err := u.GetUser(userID, "")
 	if err != nil {
@@ -135,12 +166,16 @@ func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest)
 
 	go func() {
 		defer wg.Done()
-		sanitiseFullName = u.sanitiseFullName(req.FullName)
+		if req.FullName != "" {
+			sanitiseFullName = u.sanitiseFullName(req.FullName)
+		}
 	}()
 
 	go func() {
 		defer wg.Done()
-		sanitiseEmail = u.sanitiseEmail(req.Email)
+		if req.Email != "" {
+			sanitiseEmail = u.sanitiseEmail(req.Email)
+		}
 	}()
 
 	wg.Wait()
@@ -172,6 +207,9 @@ func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest)
 		return nil, errList
 	}
 
+	keyCache := "user~" + userID.String()
+	_, _ = u.userRepository.DeleteCacheData(ctx, keyCache)
+
 	user := entity.User{
 		ID:        userID,
 		FullName:  sanitiseFullName,
@@ -184,6 +222,10 @@ func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest)
 	if err != nil {
 		errList = append(errList, err)
 	}
+
+	keyCache = "user~" + userID.String()
+	resMarshall, _ := json.Marshal(user)
+	_, _ = u.userRepository.SetCacheData(ctx, keyCache, resMarshall)
 
 	return &user, errList
 }

@@ -4,11 +4,13 @@ import (
 	"github.com/kevinicky/go-guest-book/internal/adapter"
 	"github.com/kevinicky/go-guest-book/internal/repository"
 	"github.com/kevinicky/go-guest-book/internal/usecase"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
+	"time"
 )
 
-func newVisitRepository(db *gorm.DB) repository.VisitRepository {
-	return repository.NewVisitRepository(db)
+func newVisitRepository(dbPG *gorm.DB, dbRedis *redis.Client, redisTTL time.Duration) repository.VisitRepository {
+	return repository.NewVisitRepository(dbPG, dbRedis, redisTTL)
 }
 
 func newVisitUseCase(visitRepository repository.VisitRepository, userUseCase usecase.UserUseCase) usecase.VisitUseCase {
