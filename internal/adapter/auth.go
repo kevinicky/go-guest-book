@@ -9,6 +9,7 @@ type AuthAdapter interface {
 	CreateJWT(payloadAuth entity.JwtRequest) (*entity.JwtResponse, error)
 	ValidateJWT(tokenString string) (*entity.JwtResponse, error)
 	CheckCredentials(credential, password string) error
+	ValidateUserMatrixAccess(payload entity.UserMatrixValidateRequest) error
 }
 
 type authAdapter struct {
@@ -29,4 +30,8 @@ func (a *authAdapter) ValidateJWT(tokenString string) (*entity.JwtResponse, erro
 
 func (a *authAdapter) CheckCredentials(credential, password string) error {
 	return a.authUseCase.CheckCredentials(credential, password)
+}
+
+func (a *authAdapter) ValidateUserMatrixAccess(payload entity.UserMatrixValidateRequest) error {
+	return a.authUseCase.ValidateUserMatrixAccess(payload)
 }

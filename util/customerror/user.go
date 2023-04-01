@@ -16,3 +16,4 @@ const IS_ADMIN_WRONG_CONTENT = "is_admin only be filled with true, false, or emp
 const USER_NO_RECORD_CHANGED = "no record changed"
 
 const USER_SUCCESS_DELETE = "success to delete user"
+const USER_MATRIX_NOT_FOUND = "user matrix not found"

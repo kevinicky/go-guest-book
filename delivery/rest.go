@@ -13,10 +13,13 @@ const apiVersion = "/api/v1"
 func (h *HTTPHandler) NewRest(r *mux.Router, healthAdapter adapter.HealthAdapter, userAdapter adapter.UserAdapter, visitAdapter adapter.VisitAdapter, threadAdapter adapter.ThreadAdapter, authAdapter adapter.AuthAdapter) {
 	s := r.PathPrefix(apiVersion).Subrouter()
 
+	withMiddleRouter := r.PathPrefix(apiVersion).Subrouter()
+	withMiddleRouter.Use(jwtAndMatrixAuth(authAdapter))
+
 	healthRouter(s, healthAdapter)
-	userRouter(s, userAdapter)
-	visitRouter(s, visitAdapter)
-	threadRouter(s, threadAdapter)
+	userRouter(withMiddleRouter, userAdapter)
+	visitRouter(withMiddleRouter, visitAdapter)
+	threadRouter(withMiddleRouter, threadAdapter)
 	authRouter(s, authAdapter)
 }
 

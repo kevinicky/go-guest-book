@@ -15,6 +15,7 @@ type AuthUseCase interface {
 	CreateJWT(payloadAuth entity.JwtRequest) (*entity.JwtResponse, error)
 	ValidateJWT(tokenString string) (*entity.JwtResponse, error)
 	CheckCredentials(credential, password string) error
+	ValidateUserMatrixAccess(payload entity.UserMatrixValidateRequest) error
 }
 
 type authUseCase struct {
@@ -116,4 +117,25 @@ func (a *authUseCase) CheckCredentials(credential, password string) error {
 	}
 
 	return nil
+}
+
+func (a *authUseCase) ValidateUserMatrixAccess(payload entity.UserMatrixValidateRequest) error {
+	user, err := a.userUseCase.GetUser(payload.UserID, "")
+	if err != nil {
+		return errors.New(customerror.USER_NOT_FOUND)
+	}
+
+	if _, err = a.GetUserMatrix(payload.Endpoint, user.IsAdmin); err != nil {
+		if err.Error() == customerror.USER_MATRIX_NOT_FOUND {
+			return errors.New(customerror.UNAUTHORISED_ACCESS)
+		}
+
+		return err
+	}
+
+	return nil
+}
+
+func (a *authUseCase) GetUserMatrix(endpoint string, isAdmin bool) ([]entity.UserMatrix, error) {
+	return a.userUseCase.GetUserMatrix(endpoint, isAdmin)
 }

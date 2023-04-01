@@ -35,3 +35,18 @@ type Auth struct {
 	Issuer    string `json:"issuer"`
 	Expired   int64  `json:"expired"`
 }
+
+type UserMatrix struct {
+	Id        uuid.UUID
+	Endpoint  string
+	IsAdmin   bool
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt time.Time
+}
+
+type UserMatrixValidateRequest struct {
+	UserID   uuid.UUID
+	Endpoint string
+	IsAdmin  bool
+}

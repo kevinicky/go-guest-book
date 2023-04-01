@@ -21,6 +21,7 @@ type UserUseCase interface {
 	CountUser(key, isAdmin string) (int64, error)
 	DeleteUser(userID uuid.UUID) error
 	UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest) (*entity.User, []error)
+	GetUserMatrix(endpoint string, isAdmin bool) ([]entity.UserMatrix, error)
 }
 
 type userUseCase struct {
@@ -185,6 +186,10 @@ func (u *userUseCase) UpdateUser(userID uuid.UUID, req entity.UpdateUserRequest)
 	}
 
 	return &user, errList
+}
+
+func (u *userUseCase) GetUserMatrix(endpoint string, isAdmin bool) ([]entity.UserMatrix, error) {
+	return u.userRepository.GetUserMatrix(endpoint, isAdmin)
 }
 
 func (u *userUseCase) sanitiseEmail(email string) string {

@@ -16,9 +16,9 @@ type UserRepository interface {
 	CountUser(key, isAdmin string) (int64, error)
 	SoftDeleteUser(userID uuid.UUID) error
 	CreateUser(user entity.User) (*entity.User, error)
-	CountExistingPhoneNumber(username string) (int64, error)
 	CountExistingEmail(email string) (int64, error)
 	UpdateUser(user entity.User) error
+	GetUserMatrix(endpoint string, isAdmin bool) ([]entity.UserMatrix, error)
 }
 
 type userRepository struct {
@@ -109,14 +109,6 @@ func (u *userRepository) CreateUser(user entity.User) (*entity.User, error) {
 	return &user, nil
 }
 
-func (u *userRepository) CountExistingPhoneNumber(phoneNumber string) (int64, error) {
-	var total int64
-	total = -1
-	resp := u.pgDB.Model(entity.User{}).Where("phone_number", phoneNumber).Count(&total)
-
-	return total, resp.Error
-}
-
 func (u *userRepository) CountExistingEmail(email string) (int64, error) {
 	var total int64
 	total = -1
@@ -129,4 +121,14 @@ func (u *userRepository) UpdateUser(user entity.User) error {
 	resp := u.pgDB.Save(user)
 
 	return resp.Error
+}
+
+func (u *userRepository) GetUserMatrix(endpoint string, isAdmin bool) ([]entity.UserMatrix, error) {
+	var usersMatrix []entity.UserMatrix
+	resp := u.pgDB.Where("endpoint = ?", endpoint).Where("is_admin = ?", isAdmin).Find(&usersMatrix)
+	if resp.RowsAffected < 1 {
+		resp.Error = errors.New(customerror.USER_MATRIX_NOT_FOUND)
+	}
+
+	return usersMatrix, resp.Error
 }
