@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  go-guest-book:
+    container_name: go-guest-book
+    restart: always
+    image: kevinicky/go-guest-book:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - postgres
+  redis:
+    container_name: redis
+    restart: always
+    image: redis:6.2.11-alpine3.17
+    ports:
+      - "6379:6379"
+
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres:14.5
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: guest_book
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./230401_pg_dump.sql:/docker-entrypoint-initdb.d/230401_pg_dump.sql
+
+volumes:
+  postgres-data:
+    driver: local
