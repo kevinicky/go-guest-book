@@ -22,7 +22,7 @@ func main() {
 		log.Fatalln("error while opening config folder:", err)
 	}
 
-	viper.SetConfigFile(configPath + "./config.yaml")
+	viper.SetConfigFile(configPath + "/config.yaml")
 	if err = viper.ReadInConfig(); err != nil {
 		log.Fatalln("error while reading config.yaml:", err)
 	}
