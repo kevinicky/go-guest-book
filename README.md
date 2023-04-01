@@ -1,7 +1,8 @@
 # go-guest-book
+![Go](https://github.com/kevinicky/go-guest-book/actions/workflows/go.yml/badge.svg)
+![Docker Image](https://github.com/kevinicky/go-guest-book/actions/workflows/docker-image.yml/badge.svg)
+
 Simple Guest Book using Go Postgresql, Redis, Docker, and JWT
-https://github.com/kevinicky/go-guest-book/actions/workflows/go.yml/badge.svg
-https://github.com/kevinicky/go-guest-book/actions/workflows/docker-image.yml/badge.svg
 
 - Golang as programming langauge
 - Postgresql as main Sql database
