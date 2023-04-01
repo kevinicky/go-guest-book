@@ -1,10 +1,11 @@
 # go-guest-book
-Simple Guest Book using Go Postgresql, Redis, and JWT
+Simple Guest Book using Go Postgresql, Redis, Docker, and JWT
 
 - Golang as programming langauge
 - Postgresql as main Sql database
 - Redis as caching database
 - JWT as jwt token authetication
+- Docker as container if you dont wanna build the application
 
 ## How to run
 1. Make sure you have installed below application on your machine:
@@ -14,6 +15,7 @@ Simple Guest Book using Go Postgresql, Redis, and JWT
 | Golang | 1.19 |
 | Postgresql | 14.5 |
 | Redis | 6.2.11 |
+| Docker | 20.10.23 |
 
 2. Run `git@github.com:kevinicky/go-guest-book.git`
 3. Run `PG_DUMP` using 230401_pg_dump.sql
