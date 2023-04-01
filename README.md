@@ -28,4 +28,18 @@ Simple Guest Book using Go Postgresql, Redis, Docker, and JWT
     1. Run `docker image pull kevinicky/go-guest-book:latest`
     2. Run `docker run -p 8080:8080 kevinicky/go-guest-book`
   
-    
+# Quick brief about this application
+This is a guest book application. It's use to record guest whenever they visit a place that hosted this appliaction. There is two roles that is:
+| Role | Privileges |
+| ----------- | ----------- |
+| Admin | Create, Update, Delete guest, guest_book, and comment data |
+| Non Admin (guest) | Create guest, guest_book, and comment data also Update guest data |
+
+All of this privileges is recorded on `user_matrices` table.
+For this application, there is 4 tables:
+1. users (record all user data (guest and admin))
+2. user_matrices (record all priviledges for admin and guest role)
+3. visits (record all visits (or commonly call it s guest_book) by users)
+4. threads (record all threads (or commonly call it as comment) by users)
+
+To show flow of this program, please refer to postman.json
