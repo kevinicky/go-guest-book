@@ -1,0 +1,21 @@
+app:
+  name: go-guest-book
+  port: 8080
+  server: localhost
+  timeout:
+    read: 60
+    write: 60
+    idle: 60
+
+jwt:
+  secret: secret
+  expired: 60
+
+database:
+  postgres:
+    host: localhost
+    port: 5432
+    username: postgres
+    password: secret
+    name: guest_book
+    timezone: UTC
