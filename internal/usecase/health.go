@@ -5,6 +5,7 @@ import "github.com/kevinicky/go-guest-book/internal/repository"
 type HealthUseCase interface {
 	ServerHealth() string
 	DBPGHealth() string
+	DBRedisHealth() string
 }
 
 type healthUseCase struct {
@@ -23,6 +24,15 @@ func (h *healthUseCase) ServerHealth() string {
 
 func (h *healthUseCase) DBPGHealth() string {
 	err := h.healthRepository.PingPG()
+	if err == nil {
+		return "ok"
+	}
+
+	return err.Error()
+}
+
+func (h *healthUseCase) DBRedisHealth() string {
+	err := h.healthRepository.PingRedis()
 	if err == nil {
 		return "ok"
 	}

@@ -1,10 +1,12 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"github.com/gofrs/uuid"
 	"github.com/kevinicky/go-guest-book/internal/entity"
 	"github.com/kevinicky/go-guest-book/util/customerror"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 	"time"
 )
@@ -15,15 +17,22 @@ type VisitRepository interface {
 	CountVisit() (int64, error)
 	SoftDeleteVisit(visitID uuid.UUID) error
 	CreateVisit(visit entity.Visit) (*entity.Visit, error)
+	SetCacheData(ctx context.Context, key string, value []byte) (string, error)
+	DeleteCacheData(ctx context.Context, key string) (int64, error)
+	GetCacheData(ctx context.Context, key string) (string, error)
 }
 
 type visitRepository struct {
-	pgDB *gorm.DB
+	pgDB     *gorm.DB
+	redisDB  *redis.Client
+	redisTTL time.Duration
 }
 
-func NewVisitRepository(pgDB *gorm.DB) VisitRepository {
+func NewVisitRepository(pgDB *gorm.DB, redisDB *redis.Client, redisTTL time.Duration) VisitRepository {
 	return &visitRepository{
-		pgDB: pgDB,
+		pgDB:     pgDB,
+		redisDB:  redisDB,
+		redisTTL: redisTTL,
 	}
 }
 
@@ -72,4 +81,31 @@ func (v *visitRepository) CreateVisit(visit entity.Visit) (*entity.Visit, error)
 	}
 
 	return &visit, nil
+}
+
+func (v *visitRepository) SetCacheData(ctx context.Context, key string, value []byte) (string, error) {
+	res, err := v.redisDB.Set(ctx, key, value, v.redisTTL*time.Second).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}
+
+func (v *visitRepository) DeleteCacheData(ctx context.Context, key string) (int64, error) {
+	res, err := v.redisDB.Del(ctx, key).Result()
+	if err != nil {
+		return -1, err
+	}
+
+	return res, nil
+}
+
+func (v *visitRepository) GetCacheData(ctx context.Context, key string) (string, error) {
+	res, err := v.redisDB.Get(ctx, key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
 }
