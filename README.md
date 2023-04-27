@@ -3,6 +3,7 @@ Based on dockerhub [hub.docker.com/r/kevinicky/go-guest-book](https://hub.docker
 
 ![Go](https://github.com/kevinicky/go-guest-book/actions/workflows/go.yml/badge.svg)
 ![Docker Image](https://github.com/kevinicky/go-guest-book/actions/workflows/docker-image.yml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kevinicky/go-guest-book)](https://goreportcard.com/report/github.com/kevinicky/go-guest-book)
 
 Simple Guest Book using Go Postgresql, Redis, Docker, and JWT
 
